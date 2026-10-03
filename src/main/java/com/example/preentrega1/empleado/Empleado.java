@@ -1,3 +1,6 @@
+package com.example.preentrega1.empleado;
+import com.example.preentrega1.rol.Rol;
+
 public class Empleado {
     private int legajo;
     private String nombre;
@@ -14,7 +17,7 @@ public class Empleado {
 
         char c = nombre.charAt(0);
 
-        this.email = c + apellido + "@mail.com";
+        this.email = (c + apellido + "@mail.com").toLowerCase();
     }
 
     public int getLegajo() {
@@ -25,7 +28,7 @@ public class Empleado {
         return cuil;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
@@ -33,7 +36,7 @@ public class Empleado {
         return email;
     }
 
-    public int getNombreCompleto() {
+    public String getNombreCompleto() {
         return apellido + ", " + nombre;
     }
 
@@ -41,5 +44,10 @@ public class Empleado {
         this.rol = rol;
     }
 
-
+    @Override
+    public String toString() {
+        String nombreRol = (rol == null) ? "Sin rol" : rol.getNombre();
+        return "Empleado [Legajo: " + legajo + " | " + getNombreCompleto()
+                + " | CUIL: " + cuil + " | " + email + " | Rol: " + nombreRol + "]";
+    }
 }
