@@ -1,4 +1,4 @@
-package com.example.preentrega1.rol;
+package com.example.preentrega1.exception;
 
 public class RolNoEncontrado extends RuntimeException {
 

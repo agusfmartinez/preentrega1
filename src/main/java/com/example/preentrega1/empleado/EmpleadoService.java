@@ -1,47 +1,66 @@
 package com.example.preentrega1.empleado;
+import com.example.preentrega1.exception.EmpleadoNoEncontrado;
 import com.example.preentrega1.rol.Rol;
+import com.example.preentrega1.util.Validador;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EmpleadoService {
 
-    private ArrayList<Empleado> empleados = new ArrayList<>();
+    private List<Empleado> empleados = new ArrayList<>();
 
-    public void agregar(int legajo, String nombre, String apellido, String cuil) {
-        if (existeLegajo(legajo)) {
-            System.out.println("Ya existe un empleado con legajo " + legajo + ".");
-            return;
+    // CREATE
+    public Empleado guardar(Empleado e) {
+        Validador.validarLegajo(e.getLegajo());
+        Validador.validarNombre(e.getNombre());
+        Validador.validarApellido(e.getApellido());
+        Validador.validarCuil(e.getCuil());
+
+        if (existeLegajo(e.getLegajo())) {
+            throw new IllegalArgumentException("Ya existe un empleado con legajo " + e.getLegajo() + ".");
         }
-        Empleado nuevo = new Empleado(legajo, nombre, apellido, cuil);
-        empleados.add(nuevo);
-        System.out.println("Empleado agregado: " + nuevo);
+
+        empleados.add(e);
+        return e;
     }
 
-    public void listar() {
-        if (empleados.isEmpty()) {
-            System.out.println("No hay empleados cargados.");
-            return;
-        }
-        System.out.println("\n--- Listado de empleados ---");
-        empleados.forEach(System.out::println);
+    // READ
+    public List<Empleado> listarTodos() {
+        return empleados;
     }
 
-    public Empleado buscarPorLegajo(int legajo) {
+    public Empleado obtenerPorLegajo(int legajo) {
         return empleados.stream()
                 .filter(e -> e.getLegajo() == legajo)
                 .findFirst()
                 .orElseThrow(() -> new EmpleadoNoEncontrado(legajo));
     }
 
-    public void asignarRol(int legajo, Rol rol) {
-        Empleado e = buscarPorLegajo(legajo);
-        e.setRol(rol);
-        System.out.println("Rol " + rol.getNombre() + " asignado a " + e.getNombreCompleto());
+    // UPDATE: el legajo no se modifica, solo nombre, apellido y CUIL
+    public Empleado actualizar(int legajo, Empleado datos) {
+        Empleado e = obtenerPorLegajo(legajo);
+
+        Validador.validarNombre(datos.getNombre());
+        Validador.validarApellido(datos.getApellido());
+        Validador.validarCuil(datos.getCuil());
+
+        e.setNombre(datos.getNombre());
+        e.setApellido(datos.getApellido());
+        e.setCuil(datos.getCuil());
+
+        return e;
     }
 
+    public Empleado asignarRol(int legajo, Rol rol) {
+        Empleado e = obtenerPorLegajo(legajo);
+        e.setRol(rol);
+        return e;
+    }
+
+    // DELETE
     public void eliminar(int legajo) {
-        Empleado e = buscarPorLegajo(legajo);
+        Empleado e = obtenerPorLegajo(legajo);
         empleados.remove(e);
-        System.out.println("Empleado eliminado: " + e.getNombreCompleto());
     }
 
     private boolean existeLegajo(int legajo) {

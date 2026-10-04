@@ -1,26 +1,24 @@
 package com.example.preentrega1.rol;
+import com.example.preentrega1.exception.RolNoEncontrado;
+import com.example.preentrega1.util.Validador;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RolService {
 
-    private ArrayList<Rol> roles = new ArrayList<>();
+    private List<Rol> roles = new ArrayList<>();
 
-    public void agregar(String nombre) {
-        Rol nuevo = new Rol(nombre);
-        roles.add(nuevo);
-        System.out.println("Rol agregado: " + nuevo);
+    public Rol guardar(Rol rol) {
+        Validador.validarNombre(rol.getNombre());
+        roles.add(rol);
+        return rol;
     }
 
-    public void listar() {
-        if (roles.isEmpty()) {
-            System.out.println("No hay roles cargados.");
-            return;
-        }
-        System.out.println("\n--- Listado de roles ---");
-        roles.forEach(System.out::println);
+    public List<Rol> listarTodos() {
+        return roles;
     }
 
-    public Rol buscarPorId(int id) {
+    public Rol obtenerPorId(int id) {
         return roles.stream()
                 .filter(r -> r.getId() == id)
                 .findFirst()

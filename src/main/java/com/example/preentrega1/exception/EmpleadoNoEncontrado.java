@@ -1,4 +1,4 @@
-package com.example.preentrega1.empleado;
+package com.example.preentrega1.exception;
 
 public class EmpleadoNoEncontrado extends RuntimeException {
 
