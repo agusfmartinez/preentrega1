@@ -7,6 +7,10 @@ public class Rol {
     private int id;
     private String nombre;
 
+    public Rol() {
+        this.id = contadorId++;
+    }
+
     public Rol(String nombre) {
         this.id = contadorId++;
         this.nombre = nombre;
@@ -18,6 +22,10 @@ public class Rol {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     @Override
